@@ -1,0 +1,32 @@
+version: "3.5"
+
+services:
+  backup:
+    image: mazzolino/restic
+    hostname: docker
+    restart: unless-stopped
+    env_file:
+      - $PWD/.env
+    volumes:
+      - /var/lib/docker/volumes:/mnt/volumes
+      - $HOME:/mnt/home
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      backups: "false"
+    dns:
+      - "1.1.1.1"
+      - "1.0.0.1"
+    entrypoint: ["/sbin/tini", "--", "/bin/sh", "-c", "unset PRUNE_CRON; /entrypoint"]
+
+  prune:
+    image: mazzolino/restic
+    hostname: docker
+    env_file:
+      - $PWD/.env
+    restart: unless-stopped
+    labels:
+      backups: "false"
+    dns:
+      - "1.1.1.1"
+      - "1.0.0.1"
+    entrypoint: ["/sbin/tini", "--", "/bin/sh", "-c", "unset BACKUP_CRON; unset PRE_COMMANDS; unset POST_COMMANDS_EXIT; unset POST_COMMANDS_SUCCESS; /entrypoint"]
