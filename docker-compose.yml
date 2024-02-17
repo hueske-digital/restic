@@ -11,8 +11,6 @@ services:
       - /var/lib/docker/volumes:/mnt/volumes
       - $HOME:/mnt/home
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      backups: "false"
     dns:
       - "1.1.1.1"
       - "1.0.0.1"
@@ -24,8 +22,6 @@ services:
     env_file:
       - $PWD/.env
     restart: unless-stopped
-    labels:
-      backups: "false"
     dns:
       - "1.1.1.1"
       - "1.0.0.1"
