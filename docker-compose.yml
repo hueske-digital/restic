@@ -8,26 +8,51 @@ services:
 
   backup:
     image: mazzolino/restic
-    hostname: docker
     restart: unless-stopped
-    env_file:
-      - $PWD/.env
+    environment:
+      - TZ
+      - RUN_ON_STARTUP
+      - RESTIC_REPOSITORY
+      - RESTIC_PASSWORD
+      - RESTIC_BACKUP_SOURCES
+      - RESTIC_BACKUP_ARGS
+      - RESTIC_FORGET_ARGS
+      - BACKUP_CRON
+      - PRE_COMMANDS
+      - POST_COMMANDS_INCOMPLETE
+      - POST_COMMANDS_FAILURE
+      - POST_COMMANDS_EXIT
     volumes:
+      - $PWD/bin:/scripts
       - ssh_data:/run/secrets/.ssh:ro
       - /var/lib/docker/volumes:/mnt/volumes
       - $HOME:/mnt/home
       - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: ["/sbin/tini", "--", "/bin/sh", "-c", "unset PRUNE_CRON; /entrypoint"]
 
   prune:
     image: mazzolino/restic
-    hostname: docker
+    environment:
+      - TZ
+      - RUN_ON_STARTUP
+      - RESTIC_REPOSITORY
+      - RESTIC_PASSWORD
+      - PRUNE_CRON
     volumes:
       - ssh_data:/run/secrets/.ssh:ro
-    env_file:
-      - $PWD/.env
     restart: unless-stopped
-    entrypoint: ["/sbin/tini", "--", "/bin/sh", "-c", "unset BACKUP_CRON; unset PRE_COMMANDS; unset POST_COMMANDS_EXIT; unset POST_COMMANDS_SUCCESS; /entrypoint"]
+
+  check:
+    image: mazzolino/restic
+    environment:
+      - TZ
+      - RUN_ON_STARTUP
+      - RESTIC_REPOSITORY
+      - RESTIC_PASSWORD
+      - RESTIC_CHECK_ARGS
+      - CHECK_CRON
+    volumes:
+      - ssh_data:/run/secrets/.ssh:ro
+    restart: unless-stopped
 
 volumes:
   ssh_data:
