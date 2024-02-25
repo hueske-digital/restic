@@ -6,6 +6,7 @@ if [ $? -eq 0 ]; then
     echo "Docker-Container erfolgreich gestoppt."
 else
     echo "Fehler: Docker-Container konnten nicht gestoppt werden."
+    /scripts/report-status.sh down
     exit 1
 fi
 

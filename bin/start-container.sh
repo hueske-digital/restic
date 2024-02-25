@@ -6,6 +6,7 @@ if [ $? -eq 0 ]; then
     echo "Docker-Container erfolgreich gestartet."
 else
     echo "Fehler: Docker-Container konnten nicht gestartet werden."
+    /scripts/report-status.sh down
     exit 1
 fi
 
