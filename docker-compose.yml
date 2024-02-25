@@ -8,6 +8,7 @@ services:
 
   backup:
     image: mazzolino/restic
+    hostname: docker
     restart: unless-stopped
     environment:
       - TZ
@@ -31,6 +32,7 @@ services:
 
   prune:
     image: mazzolino/restic
+    hostname: docker
     environment:
       - TZ
       - RUN_ON_STARTUP
@@ -43,6 +45,7 @@ services:
 
   check:
     image: mazzolino/restic
+    hostname: docker
     environment:
       - TZ
       - RUN_ON_STARTUP
