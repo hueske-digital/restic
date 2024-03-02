@@ -23,6 +23,7 @@ services:
       - PRE_COMMANDS
       - POST_COMMANDS_INCOMPLETE
       - POST_COMMANDS_FAILURE
+      - POST_COMMANDS_SUCCESS
       - POST_COMMANDS_EXIT
     volumes:
       - $PWD/bin:/scripts
