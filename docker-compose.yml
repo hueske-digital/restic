@@ -26,10 +26,10 @@ services:
       - POST_COMMANDS_SUCCESS
       - POST_COMMANDS_EXIT
     volumes:
-      - $PWD/bin:/scripts
+      - $PWD/bin:/scripts:ro
       - ssh_data:/run/secrets/.ssh:ro
-      - /var/lib/docker/volumes:/mnt/volumes
-      - $HOME:/mnt/home
+      - /var/lib/docker/volumes:/mnt/volumes:ro
+      - $HOME:/mnt/home:ro
       - /var/run/docker.sock:/var/run/docker.sock
 
   prune:
