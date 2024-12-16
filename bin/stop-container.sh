@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Restic unlock ausführen
+restic unlock
+if [ $? -ne 0 ]; then
+    echo "Fehler: Restic Unlock konnte nicht ausgeführt werden."
+    /scripts/report-status.sh down
+    exit 1  # Skript abbrechen, wenn restic unlock fehlschlägt
+else
+    echo "Restic Unlock erfolgreich."
+fi
+
 # Liste der IDs der Docker-Container abrufen, die das Label 'backups=true' haben
 containers=$(docker ps -qa -f 'label=backups=true')
 
