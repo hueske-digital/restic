@@ -2,12 +2,14 @@
 
 # Standardmäßig "DOWN", wenn kein Parameter oder ein ungültiger Wert übergeben wird.
 if [ $# -eq 0 ]; then
-    STATUS="DOWN"
+    STATUS="down"
 else
-    STATUS=$(echo "$1" | tr '[:lower:]' '[:upper:]') # Konvertiere in Großbuchstaben
-    if [[ ! "$STATUS" =~ ^(UP|DOWN)$ ]]; then
-        echo "Ungültiger Status übergeben. Standardmäßig 'DOWN' verwenden."
-        STATUS="DOWN"
+    NORMALIZED_STATUS=$(echo "$1" | tr '[:upper:]' '[:lower:]') # Konvertiere in Kleinbuchstaben
+    if [[ ! "$NORMALIZED_STATUS" =~ ^(up|down)$ ]]; then
+        echo "Ungültiger Status übergeben. Standardmäßig 'down' verwenden."
+        STATUS="down"
+    else
+        STATUS="$NORMALIZED_STATUS"
     fi
 fi
 
@@ -18,7 +20,7 @@ if [ -z "${NOTIFY_URL}" ]; then
 fi
 
 # Anpassen der URL je nach Bedingungen.
-if [ "$STATUS" == "DOWN" ] && [[ "${NOTIFY_URL}" == *ping* ]]; then
+if [ "$STATUS" == "down" ] && [[ "${NOTIFY_URL}" == *ping* ]]; then
     FULL_URL="${NOTIFY_URL}/fail"
 else
     FULL_URL="${NOTIFY_URL}?status=${STATUS}"
