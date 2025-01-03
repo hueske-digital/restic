@@ -12,7 +12,12 @@ if [ -z "${NOTIFY_URL}" ]; then
     exit 2
 fi
 
-FULL_URL="${NOTIFY_URL}?status=${STATUS}"
+if [ "$STATUS" == "DOWN" ] && [[ "${NOTIFY_URL}" == *ping* ]]; then
+    # https://github.com/hueske-digital/healthchecks
+    FULL_URL="${NOTIFY_URL}/fail"
+else
+    FULL_URL="${NOTIFY_URL}?status=${STATUS}"
+fi
 
 response=$(curl -s -o /dev/null -w "%{http_code}" "${FULL_URL}")
 
