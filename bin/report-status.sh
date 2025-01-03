@@ -27,7 +27,7 @@ else
 fi
 
 # Senden der Anfrage und Überprüfung des Ergebnisses.
-response=$(curl -s -o /dev/null -w "%{http_code}" "${FULL_URL}")
+response=$(curl --user-agent "resticker" -s -o /dev/null -w "%{http_code}" "${FULL_URL}")
 
 if [ "$response" -eq 200 ]; then
     echo "Erfolgreich an die Monitoring-API gesendet."
