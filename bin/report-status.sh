@@ -1,24 +1,30 @@
 #!/bin/bash
 
+# Standardmäßig "DOWN", wenn kein Parameter oder ein ungültiger Wert übergeben wird.
 if [ $# -eq 0 ]; then
-    echo "Fehler: Kein Status (UP oder DOWN) als Parameter übergeben."
-    exit 1
+    STATUS="DOWN"
+else
+    STATUS=$(echo "$1" | tr '[:lower:]' '[:upper:]') # Konvertiere in Großbuchstaben
+    if [[ ! "$STATUS" =~ ^(UP|DOWN)$ ]]; then
+        echo "Ungültiger Status übergeben. Standardmäßig 'DOWN' verwenden."
+        STATUS="DOWN"
+    fi
 fi
 
-STATUS=$1
-
+# Überprüfen, ob die NOTIFY_URL gesetzt ist.
 if [ -z "${NOTIFY_URL}" ]; then
     echo "Fehler: Die Umgebungsvariable NOTIFY_URL ist nicht gesetzt."
     exit 2
 fi
 
+# Anpassen der URL je nach Bedingungen.
 if [ "$STATUS" == "DOWN" ] && [[ "${NOTIFY_URL}" == *ping* ]]; then
-    # https://github.com/hueske-digital/healthchecks
     FULL_URL="${NOTIFY_URL}/fail"
 else
     FULL_URL="${NOTIFY_URL}?status=${STATUS}"
 fi
 
+# Senden der Anfrage und Überprüfung des Ergebnisses.
 response=$(curl -s -o /dev/null -w "%{http_code}" "${FULL_URL}")
 
 if [ "$response" -eq 200 ]; then
