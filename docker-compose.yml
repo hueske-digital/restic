@@ -15,8 +15,6 @@ services:
     image: garethgeorge/backrest:latest-alpine
     hostname: docker
     restart: unless-stopped
-    ports:
-      - "9898:9898"
     environment:
       - TZ=Europe/Berlin
       - BACKREST_DATA=/data
