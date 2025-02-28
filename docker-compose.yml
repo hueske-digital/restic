@@ -30,12 +30,12 @@ services:
       - app_cache:/cache
       - app_tmp:/tmp
       - ssh_data:/root/.ssh
-      #- /var/lib/docker/volumes:/userdata/volumes:ro
-      #- $HOME:/userdata/home:ro
+      - /var/lib/docker/volumes:/userdata/volumes:ro
+      - $HOME:/userdata/home:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - $PWD/bin:/scripts:ro
-#    networks:
-#      proxy_apps:
+    networks:
+      proxy_apps:
 
 volumes:
   app_data:
@@ -44,7 +44,7 @@ volumes:
   app_tmp:
   ssh_data:
 
-#networks:
-#  proxy_apps:
-#    name: proxy_apps
-#    external: true
+networks:
+  proxy_apps:
+    name: proxy_apps
+    external: true
