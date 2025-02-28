@@ -1,6 +1,6 @@
 # Backups
 
-This repository contains Restic – a fast, secure, efficient backup program.
+This repository contains Backrest – a fast, secure, efficient backup program with GUI.
 
 ## Requirements
 
@@ -23,51 +23,28 @@ Pull images and start the compose file:<br>
 docker compose up -d
 ```
 
-Add the following label to all containers which should be backuped:<br>
+Add the following label to all containers which should be stopped before the backup run:<br>
 ```
     labels:
       backups: "true"
 ```
 
-## Working with backups
-
-To work with your backups check out this project and make sure that your `.env` file is configured according to your existing backups.
-
-### Manual backup
+## Proxy configuration
 
 ```
-docker compose exec backup backup
+Port 9898
 ```
 
-### See your existing backups
+## Notifications
 
-Execute this in this projects directory to see all existing snapshots:
+Configure the hooks in the Backrest GUI (_Plan -> Settings_) to send notifications like in the screenshot:<br>
 
-```
-docker compose exec backup restic snapshots
-```
-
-### Restore home dir
-
-Execute this in this projects directory to restore the home dir:
-
-```
-docker compose exec backup restic restore --include /mnt/home --target / <SNAPSHOT ID>
-```
-
-If your user changed, you might have to adjust the user rights afterwards.
-
-
-### Restore a volume
-
-Execute this in this projects directory to restore a docker volume:
-
-```
-docker compose exec backup restic restore --include /mnt/volumes/name_of_volume --target / <SNAPSHOT ID>
-```
-
-The `--include` parameter can be repeated several times to restore multiple volumes at once.
-
+| HOOK                                                       | Command                                  |
+|------------------------------------------------------------|------------------------------------------|
+| `CONDITION_SNAPSHOT_START`                                 | `bash -x /scripts/stop-container.sh`     |
+| `CONDITION_SNAPSHOT_END`                                   | `bash -x /scripts/start-container.sh`    |
+| `CONDITION_SNAPSHOT_WARNING`<br>`CONDITION_SNAPSHOT_ERROR` | `bash -x /scripts/report-status.sh down` |
+| `CONDITION_SNAPSHOT_SUCCESS`                               | `bash -x /scripts/report-status.sh up`   |
 
 ## Other information
 
