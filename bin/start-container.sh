@@ -18,15 +18,4 @@ else
     fi
 fi
 
-# Restic unlock-Befehl ausführen
-echo "Führe 'restic unlock' aus..."
-restic unlock
-if [ $? -ne 0 ]; then
-    echo "Fehler: 'restic unlock' fehlgeschlagen."
-    /scripts/report-status.sh down
-    exit 1
-else
-    echo "'restic unlock' erfolgreich ausgeführt."
-fi
-
 exit 0

@@ -3,61 +3,46 @@ version: "3.8"
 services:
   ssh-key-generator:
     image: ghcr.io/hueske-digital/sshkey-generator:latest
+    environment:
+      - SSH_HOST
+      - SSH_HOSTNAME
+      - SSH_USER
+      - SSH_PORT
     volumes:
       - ssh_data:/root/.ssh
 
   backup:
-    image: mazzolino/restic
+    image: garethgeorge/backrest:latest-alpine
     hostname: docker
     restart: unless-stopped
     environment:
-      - TZ
-      - RUN_ON_STARTUP
-      - RESTIC_REPOSITORY
-      - RESTIC_PASSWORD
-      - RESTIC_BACKUP_SOURCES
-      - RESTIC_BACKUP_ARGS
-      - RESTIC_FORGET_ARGS
-      - BACKUP_CRON
+      - TZ=Europe/Berlin
+      - BACKREST_DATA=/data
+      - BACKREST_CONFIG=/config/config.json
+      - XDG_CACHE_HOME=/cache
+      - TMPDIR=/tmp
       - NOTIFY_URL
-      - PRE_COMMANDS
-      - POST_COMMANDS_INCOMPLETE
-      - POST_COMMANDS_FAILURE
-      - POST_COMMANDS_SUCCESS
-      - POST_COMMANDS_EXIT
     volumes:
-      - $PWD/bin:/scripts:ro
-      - ssh_data:/run/secrets/.ssh:ro
-      - /var/lib/docker/volumes:/mnt/volumes:ro
-      - $HOME:/mnt/home:ro
+      - app_data:/data
+      - app_config:/config
+      - app_cache:/cache
+      - app_tmp:/tmp
+      - ssh_data:/root/.ssh
+      - /var/lib/docker/volumes:/userdata/volumes:ro
+      - $HOME:/userdata/home:ro
       - /var/run/docker.sock:/var/run/docker.sock
-
-  prune:
-    image: mazzolino/restic
-    hostname: docker
-    environment:
-      - TZ
-      - RUN_ON_STARTUP
-      - RESTIC_REPOSITORY
-      - RESTIC_PASSWORD
-      - PRUNE_CRON
-    volumes:
-      - ssh_data:/run/secrets/.ssh:ro
-    restart: unless-stopped
-
-  check:
-    image: mazzolino/restic
-    hostname: docker
-    environment:
-      - TZ
-      - RUN_ON_STARTUP
-      - RESTIC_REPOSITORY
-      - RESTIC_PASSWORD
-      - RESTIC_CHECK_ARGS
-      - CHECK_CRON
-    volumes:
-      - ssh_data:/run/secrets/.ssh:ro
-    restart: unless-stopped
+      - $PWD/bin:/scripts:ro
+    networks:
+      proxy_apps:
 
 volumes:
+  app_data:
+  app_config:
+  app_cache:
+  app_tmp:
   ssh_data:
+
+networks:
+  proxy_apps:
+    name: proxy_apps
+    external: true
