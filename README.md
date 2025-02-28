@@ -29,13 +29,17 @@ Add the following label to all containers which should be stopped before the bac
       backups: "true"
 ```
 
-## Proxy configuration
+## Configuration
 
+### Port for proxy
 ```
-Port 9898
+9898
 ```
 
-## Notifications
+### Backup repository
+`sftp:backup:/your/path/to/repo`
+
+### Notifications
 
 Configure the hooks in the Backrest GUI (_Plan -> Settings_) to send notifications like in the screenshot:<br>
 
