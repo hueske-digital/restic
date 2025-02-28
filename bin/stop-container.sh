@@ -9,7 +9,7 @@ fi
 # Wenn NOTIFY_URL das Wort "ping" enthält, sende einen Start-Request
 if [[ "${NOTIFY_URL}" == *ping* ]]; then
     FULL_URL="${NOTIFY_URL}/start"
-    response=$(curl --user-agent "resticker" -s -o /dev/null -w "%{http_code}" "${FULL_URL}")
+    response=$(curl --user-agent "backrest" -s -o /dev/null -w "%{http_code}" "${FULL_URL}")
     if [ "$response" -eq 200 ]; then
         echo "Start-Notification erfolgreich an ${FULL_URL} gesendet."
     else
