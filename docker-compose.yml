@@ -28,8 +28,8 @@ services:
       - app_cache:/cache
       - app_tmp:/tmp
       - ssh_data:/root/.ssh
-      - /var/lib/docker/volumes:/mnt/volumes:ro
-      - $HOME:/mnt/home:ro
+      - /var/lib/docker/volumes:/mnt/volumes
+      - $HOME:/mnt/home
       - /var/run/docker.sock:/var/run/docker.sock
       - $PWD/bin:/scripts:ro
     networks:
