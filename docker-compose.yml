@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   ssh-key-generator:
     image: ghcr.io/hueske-digital/sshkey-generator:latest
