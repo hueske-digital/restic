@@ -22,6 +22,9 @@ services:
       - XDG_CACHE_HOME=/cache
       - TMPDIR=/tmp
       - NOTIFY_URL
+      - CADDY_DOMAIN=${CADDY_DOMAIN}
+      - CADDY_TYPE=${CADDY_TYPE:-internal}
+      - CADDY_PORT=${CADDY_PORT:-9898}
     volumes:
       - app_data:/data
       - app_config:/config
@@ -33,7 +36,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - $PWD/bin:/scripts:ro
     networks:
-      proxy_apps:
+      - caddy
 
 volumes:
   app_data:
@@ -43,6 +46,4 @@ volumes:
   ssh_data:
 
 networks:
-  proxy_apps:
-    name: proxy_apps
-    external: true
+  caddy:
