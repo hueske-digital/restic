@@ -23,6 +23,7 @@ services:
       - CADDY_DOMAIN=${CADDY_DOMAIN}
       - CADDY_TYPE=${CADDY_TYPE:-internal}
       - CADDY_PORT=${CADDY_PORT:-9898}
+      - CADDY_ALLOWLIST=${CADDY_ALLOWLIST:-}
     volumes:
       - app_data:/data
       - app_config:/config
