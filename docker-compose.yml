@@ -24,6 +24,8 @@ services:
       - CADDY_TYPE=${CADDY_TYPE:-internal}
       - CADDY_PORT=${CADDY_PORT:-9898}
       - CADDY_ALLOWLIST=${CADDY_ALLOWLIST:-}
+      - CADDY_AUTH=${CADDY_AUTH:-}
+      - CADDY_AUTH_URL=${CADDY_AUTH_URL:-}
     volumes:
       - app_data:/data
       - app_config:/config
