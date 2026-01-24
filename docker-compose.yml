@@ -26,6 +26,7 @@ services:
       - CADDY_ALLOWLIST=${CADDY_ALLOWLIST:-}
       - CADDY_AUTH=${CADDY_AUTH:-}
       - CADDY_AUTH_URL=${CADDY_AUTH_URL:-}
+      - CADDY_AUTH_GROUPS=${CADDY_AUTH_GROUPS:-}
     volumes:
       - app_data:/data
       - app_config:/config
